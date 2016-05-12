@@ -7,6 +7,9 @@ use \URL;
  * Class Saml2User
  * @package Aacotroneo\Saml2
  */
+ 
+ //John's edit
+ 
 class Saml2User
 {
 	protected $auth;
