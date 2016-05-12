@@ -1,9 +1,7 @@
-<?php
-
-namespace Aacotroneo\Saml2;
+<?php namespace Aacotroneo\Saml2;
 
 use OneLogin_Saml2_Auth;
-
+use \URL;
 /**
  * A simple class that represents the user that 'came' inside the saml2 assertion
  * Class Saml2User
@@ -11,63 +9,80 @@ use OneLogin_Saml2_Auth;
  */
 class Saml2User
 {
+	protected $auth;
 
-    protected $auth;
+	function __construct(OneLogin_Saml2_Auth $auth)
+	{
+	    $this->auth = $auth;
+	}
 
-    function __construct(OneLogin_Saml2_Auth $auth)
-    {
-        $this->auth = $auth;
-    }
+	/**
+	 * @return OneLogin_Saml2_Auth $auth
+	 */
+	function returnAuthObject()
+	{
+		return $this->auth;
+	}
 
-    /**
-     * @return string User Id retrieved from assertion processed this request
-     */
-    function getUserId()
-    {
-        $auth = $this->auth;
+	/**
+	 * @return string User Id retrieved from assertion processed this request
+	 */
+	function getUserId()
+	{
+	    $auth = $this->auth;
 
-        return $auth->getNameId();
+	    return $auth->getNameId();
+	}
+    
+	/**
+	 * @return string Session Index retrieved from assertion processed this request
+ 	 */
+	function getSessionIndex()
+	{
+		$auth = $this->auth;
 
-    }
+		return $auth->getSessionIndex();
+	}    
+	
+	/**
+	 * 
+	 @return string NameId retrieved from assertion processed this request
+	 */
+	function getNameId()
+	{
+	    return $this->auth->getNameId();
+	}
 
-    /**
-     * @return array attributes retrieved from assertion processed this request
-     */
-    function getAttributes()
-    {
-        $auth = $this->auth;
+	/**
+	 * @return array attributes retrieved from assertion processed this request
+	 */
+	function getAttributes()
+	{
+		$auth = $this->auth;
 
-        return $auth->getAttributes();
-    }
+		return $auth->getAttributes();
+	}
 
-    /**
-     * @return string the saml assertion processed this request
-     */
-    function getRawSamlAssertion()
-    {
-        return app('request')->input('SAMLResponse'); //just this request
-    }
+	/**
+	 * @return string the saml assertion processed this request
+	 */
+	function getRawSamlAssertion()
+	{
+		return app('request')->input('SAMLResponse'); //just this request
+	}
 
-    function getIntendedUrl()
-    {
-        $relayState = app('request')->input('RelayState'); //just this request
+	/**
+	 * Returns full URL requested prior to SSO redirect
+	 * @return string $relayState
+	 */
+	function getIntendedUrl()
+	{
+		$relayState		= app('request')->input('RelayState'); //just this request
+		$url				= app('Illuminate\Contracts\Routing\UrlGenerator');
 
-        $url = app('Illuminate\Contracts\Routing\UrlGenerator');
-
-        if ($relayState && $url->full() != $relayState) {
-
-            return $relayState;
-        }
-    }
-
-    function getSessionIndex()
-    {
-        return $this->auth->getSessionIndex();
-    }
-
-    function getNameId()
-    {
-        return $this->auth->getNameId();
-    }
-
+		if ($relayState && URL::full() != $relayState) 
+		{
+		    return $relayState;
+		}
+	}
 }
