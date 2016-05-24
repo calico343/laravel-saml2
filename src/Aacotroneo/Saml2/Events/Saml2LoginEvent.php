@@ -16,6 +16,14 @@ class Saml2LoginEvent {
         return $this->user;
     }
 
-
+    public function getSessionIndex()
+    {
+	    return $this->user->getSessionIndex();
+    }
+    
+    public function getAttributes()
+    {
+	    return $this->user->getAttributes();
+    }
 
 }
