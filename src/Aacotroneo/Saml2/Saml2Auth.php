@@ -6,6 +6,7 @@ use OneLogin_Saml2_Auth;
 use OneLogin_Saml2_Error;
 use OneLogin_Saml2_Utils;
 use Aacotroneo\Saml2\Events\Saml2LogoutEvent;
+use Aacotroneo\Saml2\Events\Saml2LoginEvent;
 
 use Log;
 use Psr\Log\InvalidArgumentException;
@@ -87,7 +88,7 @@ class Saml2Auth
         if (!$auth->isAuthenticated()) {
             return array('error' => 'Could not authenticate');
         }
-
+		event(new Saml2LoginEvent($auth));						//added this in because otherwise the class is never called, and that breaks the Event call
         return null;
 
     }

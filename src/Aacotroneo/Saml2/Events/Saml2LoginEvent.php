@@ -26,5 +26,4 @@ class Saml2LoginEvent {
 	    return $this->user->getAttributes();
     }
 
-
 }
