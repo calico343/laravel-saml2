@@ -1,29 +1,31 @@
-<?php
+<?php namespace Aacotroneo\Saml2\Events;
 
-namespace Aacotroneo\Saml2\Events;
+class Saml2LoginEvent 
+{
+	protected $user;
 
-class Saml2LoginEvent {
+	function __construct($user)
+	{
+		$this->user = $user;
+	}
 
-    protected $user;
+	public function getSaml2User()
+	{
+		return $this->user;
+	}
 
-    function __construct($user)
-    {
-        $this->user = $user;
-    }
+	public function getSessionIndex()
+	{
+		return $this->user->getSessionIndex();
+	}
 
-    public function getSaml2User()
-    {
-        return $this->user;
-    }
+	public function getAttributes()
+	{
+		return $this->user->getAttributes();
+	}
 
-    public function getSessionIndex()
-    {
-	    return $this->user->getSessionIndex();
-    }
-    
-    public function getAttributes()
-    {
-	    return $this->user->getAttributes();
-    }
-
+	public function getRawSamlAssertion()
+	{
+		return $this->user->getRawSamlAssertion();
+	}
 }
